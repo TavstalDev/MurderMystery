@@ -247,6 +247,37 @@ public class PlaceholderInitializer {
         return summaryEnding;
       }
     });
+
+    // %murdermystery_current_arena_id% - By: postyizhan
+    getPlaceholderManager().registerPlaceholder(new Placeholder("current_arena_id", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        IPluginArena playerArena = getArenaRegistry().getArena(player);
+        return playerArena != null ? playerArena.getId() : "";
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
+
+    // %murdermystery_arena_current_state% - By: postyizhan
+    getPlaceholderManager().registerPlaceholder(new Placeholder("arena_current_state", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        IPluginArena playerArena = getArenaRegistry().getArena(player);
+        if(playerArena != null) {
+          return playerArena.getArenaState().toString().toLowerCase();
+        }
+        return "";
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
   }
 
   private PlaceholderManager getPlaceholderManager() {
