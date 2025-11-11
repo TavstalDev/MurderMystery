@@ -23,6 +23,7 @@ import plugily.projects.murdermystery.Main;
 import plugily.projects.murdermystery.commands.arguments.admin.RolePassArgument;
 import plugily.projects.murdermystery.commands.arguments.admin.arena.SpecialBlockRemoverArgument;
 import plugily.projects.murdermystery.commands.arguments.game.RoleSelectorArgument;
+import plugily.projects.murdermystery.commands.arguments.game.SwordSkinsArgument;
 
 /**
  * @author Plajer

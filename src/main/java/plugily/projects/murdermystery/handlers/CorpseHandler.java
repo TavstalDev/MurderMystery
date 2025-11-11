@@ -81,6 +81,7 @@ public class CorpseHandler implements Listener {
       return;
     }
 
+    // By: postyizhan
     if(!plugin.getConfigPreferences().getOption("LAST_WORDS_ENABLE")) {
       return;
     }

@@ -41,6 +41,7 @@ public class SwordSkinManager {
 
   private final List<SwordSkin> registeredSwordSkins = new ArrayList<>();
   private final Map<Player, ItemStack> murdererSwords = new HashMap<>();
+  // By: postyizhan
   private final Map<String, SwordSkin> skinsByName = new HashMap<>();
   private final Map<Integer, String> hashToName = new HashMap<>();
   private final Main plugin;
@@ -112,10 +113,12 @@ public class SwordSkinManager {
     return murdererSwords.get(player);
   }
 
+  // By: postyizhan
   public SwordSkin getSkinByName(String skinName) {
     return skinsByName.get(skinName);
   }
 
+  // By: postyizhan
   public String getSkinNameByItemStack(ItemStack itemStack) {
     for(Map.Entry<String, SwordSkin> entry : skinsByName.entrySet()) {
       if(entry.getValue().getItemStack().getType() == itemStack.getType()) {
@@ -125,6 +128,7 @@ public class SwordSkinManager {
     return null;
   }
 
+  // By: postyizhan
   public ItemStack getPlayerSelectedSwordSkin(Player player) {
     IUser user = plugin.getUserManager().getUser(player);
     String selectedSkinName = getPlayerSelectedSkinName(player);
@@ -142,6 +146,7 @@ public class SwordSkinManager {
     return getRandomSwordSkin(player);
   }
 
+  // By: postyizhan
   public String getPlayerCurrentSkinName(Player player) {
     String selectedSkinName = getPlayerSelectedSkinName(player);
 
@@ -156,6 +161,7 @@ public class SwordSkinManager {
     return "default";
   }
 
+  // By: postyizhan
   private String getPlayerSelectedSkinName(Player player) {
     IUser user = plugin.getUserManager().getUser(player);
     int skinHash = user.getStatistic("SELECTED_SWORD_SKIN");
