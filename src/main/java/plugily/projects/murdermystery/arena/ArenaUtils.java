@@ -194,21 +194,22 @@ public class ArenaUtils extends PluginArenaUtils {
         .sendPlayer();
       return;
     }
-    String msg =
-      new MessageBuilder("IN_GAME_MESSAGES_ARENA_PLAYING_SCORE_BONUS")
+    MessageBuilder messageBuilder = new MessageBuilder("IN_GAME_MESSAGES_ARENA_PLAYING_SCORE_BONUS")
         .asKey()
         .player(user.getPlayer())
         .arena(user.getArena())
         .integer(action.points)
-        .value(action.action)
-        .build();
+        .value(action.action);
 
+    // Special handling for negative scores
     if(action.points < 0) {
-      msg = msg.replace("+", "");
+      String msg = messageBuilder.build().replace("+", "");
+      user.getPlayer().sendMessage(msg);
+    } else {
+      messageBuilder.sendPlayer();
     }
 
     user.adjustStatistic("LOCAL_SCORE", action.points);
-    user.getPlayer().sendMessage(msg);
   }
 
   public enum ScoreAction {
