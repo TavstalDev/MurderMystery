@@ -21,6 +21,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.version.xseries.XMaterial;
 import plugily.projects.murdermystery.Main;
@@ -40,8 +41,12 @@ public class SwordSkinManager {
 
   private final List<SwordSkin> registeredSwordSkins = new ArrayList<>();
   private final Map<Player, ItemStack> murdererSwords = new HashMap<>();
+  private final Map<String, SwordSkin> skinsByName = new HashMap<>();
+  private final Map<Integer, String> hashToName = new HashMap<>();
+  private final Main plugin;
 
   public SwordSkinManager(Main plugin) {
+    this.plugin = plugin;
     registerSwordSkins(plugin);
   }
 
@@ -50,12 +55,15 @@ public class SwordSkinManager {
     ConfigurationSection section = config.getConfigurationSection("Skins.Sword");
     String path = "Skins.Sword.";
     for (String id : section.getKeys(false)) {
-      addSwordSkin(
-          new SwordSkin(
-              XMaterial.matchXMaterial(config.getString(path + id + ".Material", "BEDROCK"))
-                  .orElse(XMaterial.BEDROCK)
-                  .parseItem(),
-              config.getString(path + id + ".Permission", "")));
+      SwordSkin skin = new SwordSkin(
+        XMaterial.matchXMaterial(config.getString(path + id + ".Material", "BEDROCK"))
+          .orElse(XMaterial.BEDROCK)
+          .parseItem(),
+        config.getString(path + id + ".Permission", ""));
+      config.getString(path + id + ".Permission", "");
+      addSwordSkin(skin);
+      skinsByName.put(id, skin);
+      hashToName.put(id.hashCode(), id);
     }
   }
 
@@ -102,5 +110,59 @@ public class SwordSkinManager {
 
   public ItemStack getMurdererSword(Player player) {
     return murdererSwords.get(player);
+  }
+
+  public SwordSkin getSkinByName(String skinName) {
+    return skinsByName.get(skinName);
+  }
+
+  public String getSkinNameByItemStack(ItemStack itemStack) {
+    for(Map.Entry<String, SwordSkin> entry : skinsByName.entrySet()) {
+      if(entry.getValue().getItemStack().getType() == itemStack.getType()) {
+        return entry.getKey();
+      }
+    }
+    return null;
+  }
+
+  public ItemStack getPlayerSelectedSwordSkin(Player player) {
+    IUser user = plugin.getUserManager().getUser(player);
+    String selectedSkinName = getPlayerSelectedSkinName(player);
+
+    if(selectedSkinName != null && !selectedSkinName.isEmpty() && !selectedSkinName.equals("0")) {
+      SwordSkin selectedSkin = getSkinByName(selectedSkinName);
+      if(selectedSkin != null) {
+        if(!selectedSkin.hasPermission() || player.hasPermission(selectedSkin.getPermission())) {
+          ItemStack itemStack = selectedSkin.getItemStack();
+          murdererSwords.put(player, itemStack);
+          return itemStack;
+        }
+      }
+    }
+    return getRandomSwordSkin(player);
+  }
+
+  public String getPlayerCurrentSkinName(Player player) {
+    String selectedSkinName = getPlayerSelectedSkinName(player);
+
+    if(selectedSkinName != null && !selectedSkinName.isEmpty() && !selectedSkinName.equals("0")) {
+      SwordSkin selectedSkin = getSkinByName(selectedSkinName);
+      if(selectedSkin != null) {
+        if(!selectedSkin.hasPermission() || player.hasPermission(selectedSkin.getPermission())) {
+          return selectedSkinName;
+        }
+      }
+    }
+    return "default";
+  }
+
+  private String getPlayerSelectedSkinName(Player player) {
+    IUser user = plugin.getUserManager().getUser(player);
+    int skinHash = user.getStatistic("SELECTED_SWORD_SKIN");
+    if(skinHash == 0) {
+      return "default";
+    }
+    String skinName = hashToName.get(skinHash);
+    return skinName != null ? skinName : "default";
   }
 }

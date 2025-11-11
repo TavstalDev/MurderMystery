@@ -105,6 +105,10 @@ public class MessageInitializer {
     getMessageManager().registerMessage("PLACEHOLDERS_PLAYER_ROLE_DETECTIVE", new Message("Placeholders.Player-Role.Detective", "detective"));
     getMessageManager().registerMessage("PLACEHOLDERS_PLAYER_ROLE_INNOCENT", new Message("Placeholders.Player-Role.Innocent", "innocent"));
     getMessageManager().registerMessage("PLACEHOLDERS_PLAYER_ROLE_SPECTATOR", new Message("Placeholders.Player-Role.Spectator", "spectator"));
+
+    getMessageManager().registerMessage("COMMANDS_SWORD_SKINS_SKIN_NOT_FOUND", new Message("Commands.Sword-Skins.Skin-Not-Found", "&cThe skin '%value%' was not found!"));
+    getMessageManager().registerMessage("COMMANDS_SWORD_SKINS_NO_PERMISSION", new Message("Commands.Sword-Skins.No-Permission", "&cYou do not have permission to use the skin '%value%'!"));
+    getMessageManager().registerMessage("COMMANDS_SWORD_SKINS_SKIN_SELECTED", new Message("Commands.Sword-Skins.Skin-Selected", "&aSuccessfully selected sword skin: &f%value%"));
   }
 
   private MessageManager getMessageManager() {

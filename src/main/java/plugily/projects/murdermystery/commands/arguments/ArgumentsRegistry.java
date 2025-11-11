@@ -35,6 +35,7 @@ public class ArgumentsRegistry extends PluginArgumentsRegistry {
     super(plugin);
     //register basic arugments
     new RoleSelectorArgument(this);
+    new SwordSkinsArgument(this);
 
     //register admin related arguments
     new SpecialBlockRemoverArgument(this);

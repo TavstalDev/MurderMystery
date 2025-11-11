@@ -421,6 +421,19 @@ public class PlaceholderInitializer {
         return "";
       }
     });
+
+    // %murdermystery_user_current_sword_skin% - By: postyizhan
+    getPlaceholderManager().registerPlaceholder(new Placeholder("user_current_sword_skin", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        return plugin.getSwordSkinManager().getPlayerCurrentSkinName(player);
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
   }
 
   private PlaceholderManager getPlaceholderManager() {
